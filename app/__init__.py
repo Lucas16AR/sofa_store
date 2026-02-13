@@ -2,6 +2,7 @@ from flask import Flask
 from .extensions import db, login_manager, migrate
 from .models import User
 from config import Config
+from .extensions import db, login_manager, migrate, csrf, configure_cloudinary
 
 
 def create_app():
@@ -11,6 +12,9 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
+    configure_cloudinary(app)
+
 
     login_manager.login_view = "auth.login"
 

@@ -40,3 +40,19 @@ class Option(db.Model):
 
     category_id = db.Column(db.Integer, db.ForeignKey("option_category.id"), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship("User", backref="orders")
+    configurations = db.relationship("OrderConfiguration", backref="order", cascade="all, delete-orphan")
+
+
+class OrderConfiguration(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
+    option_id = db.Column(db.Integer, db.ForeignKey("option.id"), nullable=False)
+
+    option = db.relationship("Option")

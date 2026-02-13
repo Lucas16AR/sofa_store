@@ -1,0 +1,42 @@
+<h1>Administrar Opciones</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div>
+        {{ form.name.label }}
+        {{ form.name() }}
+    </div>
+
+    <div>
+        {{ form.category.label }}
+        {{ form.category() }}
+    </div>
+
+    <div>
+        {{ form.image.label }}
+        {{ form.image() }}
+    </div>
+
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+
+<hr>
+
+<h2>Opciones existentes:</h2>
+
+<ul>
+    {% for option in options %}
+        <li>
+            {{ option.name }} - ({{ option.category.name }})
+            {% if option.image_url %}
+                <br>
+                <img src="{{ option.image_url }}" width="100">
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="/admin">Volver</a>

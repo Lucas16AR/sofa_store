@@ -1,0 +1,29 @@
+<h1>Configurador de Sillón</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    {% for category in categories %}
+        <h3>{{ category.name }}</h3>
+
+        {% for option in category.options if option.is_active %}
+            <div>
+                <input type="radio"
+                       name="category_{{ category.id }}"
+                       value="{{ option.id }}"
+                       required>
+
+                {{ option.name }}
+
+                {% if option.image_url %}
+                    <br>
+                    <img src="{{ option.image_url }}" width="120">
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <hr>
+    {% endfor %}
+
+    {{ form.submit() }}
+</form>

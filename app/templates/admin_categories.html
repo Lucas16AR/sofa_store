@@ -1,0 +1,20 @@
+<h1>Administrar Categorías</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }}
+    {{ form.name() }}
+    {{ form.submit() }}
+</form>
+
+<hr>
+
+<h2>Categorías existentes:</h2>
+
+<ul>
+    {% for category in categories %}
+        <li>{{ category.name }}</li>
+    {% endfor %}
+</ul>
+
+<a href="/admin">Volver al panel</a>
