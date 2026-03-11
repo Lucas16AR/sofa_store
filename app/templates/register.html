@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Ingresar | Sofa Store{% endblock %}
+{% block title %}Registro | Sofa Store{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
         <div class="card form-card p-4">
-            <h2 class="mb-4">Iniciar sesión</h2>
+            <h2 class="mb-4">Crear cuenta</h2>
 
             <form method="POST">
                 {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control") }}
+                </div>
 
                 <div class="mb-3">
                     {{ form.email.label(class="form-label") }}
@@ -19,6 +24,11 @@
                 <div class="mb-3">
                     {{ form.password.label(class="form-label") }}
                     {{ form.password(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control") }}
                 </div>
 
                 {{ form.submit(class="btn btn-dark w-100") }}

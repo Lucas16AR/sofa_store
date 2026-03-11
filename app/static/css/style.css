@@ -1,0 +1,87 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.hero {
+    background: linear-gradient(135deg, #212529, #495057);
+    color: white;
+    border-radius: 18px;
+    padding: 3rem;
+    margin-bottom: 2rem;
+}
+
+.card-product,
+.option-card,
+.custom-panel {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-product:hover,
+.option-card:hover,
+.custom-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.card-product img,
+.option-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.price-badge {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.config-option input[type="radio"] {
+    display: none;
+}
+
+.config-option label {
+    display: block;
+    cursor: pointer;
+}
+
+.config-option input[type="radio"]:checked + label .option-card {
+    border: 2px solid #212529;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.form-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+}
+
+.table thead th {
+    background-color: #212529;
+    color: white;
+    border: none;
+}
+
+.table tbody tr {
+    vertical-align: middle;
+}
+
+.custom-panel h4 {
+    margin-bottom: 0.75rem;
+}
+
+.custom-panel p {
+    margin-bottom: 0;
+}
+
+.badge {
+    font-size: 0.85rem;
+}

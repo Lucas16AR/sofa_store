@@ -27,7 +27,6 @@ def create_app():
     app.register_blueprint(public_bp)
 
     with app.app_context():
-        db.create_all()
         create_admin_if_not_exists()
 
     return app
@@ -37,6 +36,7 @@ def create_admin_if_not_exists():
     if not User.query.filter_by(role="admin").first():
         admin = User(
             email="admin@sofastore.com",
+            name="Administrador",
             role="admin"
         )
         admin.set_password("admin123")

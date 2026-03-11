@@ -1,42 +1,79 @@
-<h1>Administrar Opciones</h1>
+{% extends "base.html" %}
 
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
+{% block title %}Opciones | Admin{% endblock %}
 
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        {{ form.name.label }}
-        {{ form.name() }}
+        <h1 class="fw-bold mb-1">Administrar Opciones</h1>
+        <p class="text-muted mb-0">Agregá opciones para cada categoría del configurador.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card form-card p-4">
+            <h4 class="fw-bold mb-3">Nueva opción</h4>
+
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control", placeholder="Ej: Lino Beige") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.category.label(class="form-label") }}
+                    {{ form.category(class="form-select") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.image.label(class="form-label") }}
+                    {{ form.image(class="form-control") }}
+                </div>
+
+                {{ form.submit(class="btn btn-dark w-100") }}
+            </form>
+        </div>
     </div>
 
-    <div>
-        {{ form.category.label }}
-        {{ form.category() }}
-    </div>
+    <div class="col-lg-8">
+        <div class="card form-card p-4">
+            <h4 class="fw-bold mb-3">Opciones existentes</h4>
 
-    <div>
-        {{ form.image.label }}
-        {{ form.image() }}
-    </div>
+            {% if options %}
+                <div class="row g-4">
+                    {% for option in options %}
+                        <div class="col-md-6">
+                            <div class="card option-card h-100 p-3">
+                                {% if option.image_url %}
+                                    <img src="{{ option.image_url }}" alt="{{ option.name }}">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/400x300?text=Opcion" alt="{{ option.name }}">
+                                {% endif %}
 
-    <div>
-        {{ form.submit() }}
-    </div>
-</form>
+                                <div class="card-body px-0 pb-0">
+                                    <h5 class="fw-bold">{{ option.name }}</h5>
+                                    <p class="text-muted mb-2">Categoría: {{ option.category.name }}</p>
 
-<hr>
-
-<h2>Opciones existentes:</h2>
-
-<ul>
-    {% for option in options %}
-        <li>
-            {{ option.name }} - ({{ option.category.name }})
-            {% if option.image_url %}
-                <br>
-                <img src="{{ option.image_url }}" width="100">
+                                    {% if option.is_active %}
+                                        <span class="badge bg-success">Activa</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inactiva</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-secondary mb-0">
+                    Todavía no hay opciones cargadas.
+                </div>
             {% endif %}
-        </li>
-    {% endfor %}
-</ul>
-
-<a href="/admin">Volver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

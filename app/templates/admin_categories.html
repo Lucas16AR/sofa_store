@@ -1,20 +1,65 @@
-<h1>Administrar Categorías</h1>
+{% extends "base.html" %}
 
-<form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.name.label }}
-    {{ form.name() }}
-    {{ form.submit() }}
-</form>
+{% block title %}Categorías | Admin{% endblock %}
 
-<hr>
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Administrar Categorías</h1>
+        <p class="text-muted mb-0">Creá categorías para organizar las opciones del configurador.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
+</div>
 
-<h2>Categorías existentes:</h2>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card form-card p-4">
+            <h4 class="fw-bold mb-3">Nueva categoría</h4>
 
-<ul>
-    {% for category in categories %}
-        <li>{{ category.name }}</li>
-    {% endfor %}
-</ul>
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
-<a href="/admin">Volver al panel</a>
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control", placeholder="Ej: Tela, Color, Relleno") }}
+                </div>
+
+                {{ form.submit(class="btn btn-dark w-100") }}
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card form-card p-4">
+            <h4 class="fw-bold mb-3">Categorías existentes</h4>
+
+            {% if categories %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Creada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td>{{ category.id }}</td>
+                                    <td>{{ category.name }}</td>
+                                    <td>{{ category.created_at.strftime('%d/%m/%Y') if category.created_at else '-' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-secondary mb-0">
+                    Todavía no hay categorías cargadas.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

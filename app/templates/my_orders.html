@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Mis pedidos | Sofa Store{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Mis pedidos</h2>
+
+<div class="row g-4">
+    {% for order in orders %}
+        <div class="col-md-6">
+            <div class="card form-card p-4 h-100">
+                <h4 class="fw-bold">{{ order.product.name }}</h4>
+                <p class="text-muted mb-1">Fecha: {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p class="mb-1">Estado: <strong>{{ order.status }}</strong></p>
+                <p class="mb-3">Total: <strong>${{ order.total_price }}</strong></p>
+
+                {% if order.notes %}
+                    <p><strong>Observaciones:</strong> {{ order.notes }}</p>
+                {% endif %}
+
+                <h6>Configuración elegida:</h6>
+                <ul class="mb-0">
+                    {% for config in order.configurations %}
+                        <li>
+                            {{ config.option_name_snapshot }}
+                            {% if config.option_price_snapshot %}
+                                - ${{ config.option_price_snapshot }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-secondary">
+                Todavía no realizaste ningún pedido.
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
