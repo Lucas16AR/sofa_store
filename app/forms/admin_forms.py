@@ -22,5 +22,8 @@ class ProductForm(FlaskForm):
     name = StringField("Nombre del producto", validators=[DataRequired(), Length(min=2, max=120)])
     description = TextAreaField("Descripción", validators=[Optional()])
     base_price = DecimalField("Precio base", validators=[DataRequired(), NumberRange(min=0)])
-    image_url = StringField("URL de imagen", validators=[Optional(), Length(max=500)])
+    image = FileField("Imagen del producto", validators=[Optional()])
     submit = SubmitField("Crear producto")
+
+class SimpleSubmitForm(FlaskForm):
+    submit = SubmitField("Confirmar")

@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h1 class="fw-bold mb-1">Administrar Opciones</h1>
-        <p class="text-muted mb-0">Agregá opciones para cada categoría del configurador.</p>
+        <p class="text-muted mb-0">Agregá y controlá las opciones disponibles para el configurador.</p>
     </div>
     <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
 </div>
@@ -58,11 +58,26 @@
                                     <h5 class="fw-bold">{{ option.name }}</h5>
                                     <p class="text-muted mb-2">Categoría: {{ option.category.name }}</p>
 
-                                    {% if option.is_active %}
-                                        <span class="badge bg-success">Activa</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Inactiva</span>
-                                    {% endif %}
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {% if option.is_active %}
+                                                <span class="badge bg-success">Activa</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Inactiva</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <form method="POST" action="{{ url_for('admin.toggle_option', option_id=option.id) }}">
+                                            {{ toggle_form.hidden_tag() }}
+                                            <button type="submit" class="btn btn-sm btn-outline-dark">
+                                                {% if option.is_active %}
+                                                    Desactivar
+                                                {% else %}
+                                                    Activar
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

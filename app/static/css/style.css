@@ -12,18 +12,19 @@ body {
 
 .card-product,
 .option-card,
-.custom-panel {
+.form-card,
+.custom-panel,
+.stat-card {
     border: none;
     border-radius: 18px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-product:hover,
-.option-card:hover,
-.custom-panel:hover {
+.option-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    transition: 0.2s ease;
 }
 
 .card-product img,
@@ -58,12 +59,6 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
-.form-card {
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
-}
-
 .table thead th {
     background-color: #212529;
     color: white;
@@ -74,14 +69,41 @@ body {
     vertical-align: middle;
 }
 
-.custom-panel h4 {
-    margin-bottom: 0.75rem;
-}
-
-.custom-panel p {
-    margin-bottom: 0;
-}
-
 .badge {
     font-size: 0.85rem;
+}
+
+/* Cards clickeables del admin */
+.admin-link-card {
+    border: 2px solid transparent;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+.admin-link-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+    border-color: #212529;
+}
+
+.admin-link-card .go-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Cards estáticas / informativas */
+.stat-card {
+    background: white;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+.stat-label {
+    color: #6c757d;
+    margin-bottom: 0;
 }

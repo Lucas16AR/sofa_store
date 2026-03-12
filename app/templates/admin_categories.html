@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h1 class="fw-bold mb-1">Administrar Categorías</h1>
-        <p class="text-muted mb-0">Creá categorías para organizar las opciones del configurador.</p>
+        <p class="text-muted mb-0">Creá, editá y eliminá categorías del configurador.</p>
     </div>
     <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
 </div>
@@ -41,6 +41,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Creada</th>
+                                <th class="text-end">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,6 +50,18 @@
                                     <td>{{ category.id }}</td>
                                     <td>{{ category.name }}</td>
                                     <td>{{ category.created_at.strftime('%d/%m/%Y') if category.created_at else '-' }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('admin.edit_category', category_id=category.id) }}" class="btn btn-sm btn-outline-dark">
+                                            Editar
+                                        </a>
+
+                                        <form method="POST" action="{{ url_for('admin.delete_category', category_id=category.id) }}" class="d-inline">
+                                            {{ delete_form.hidden_tag() }}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

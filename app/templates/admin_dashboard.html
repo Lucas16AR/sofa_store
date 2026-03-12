@@ -8,34 +8,35 @@
         <h1 class="fw-bold mb-1">Panel de Administración</h1>
         <p class="text-muted mb-0">Gestioná el contenido principal del sistema.</p>
     </div>
+    <a href="{{ url_for('public.home') }}" class="btn btn-dark">Ver tienda</a>
 </div>
 
 <div class="row g-4 mb-4">
     <div class="col-md-6 col-xl-3">
-        <div class="card form-card p-4 text-center">
-            <h3 class="fw-bold">{{ total_categories }}</h3>
-            <p class="text-muted mb-0">Categorías</p>
+        <div class="card stat-card p-4 text-center h-100">
+            <div class="stat-number">{{ total_categories }}</div>
+            <p class="stat-label">Categorías</p>
         </div>
     </div>
 
     <div class="col-md-6 col-xl-3">
-        <div class="card form-card p-4 text-center">
-            <h3 class="fw-bold">{{ total_options }}</h3>
-            <p class="text-muted mb-0">Opciones</p>
+        <div class="card stat-card p-4 text-center h-100">
+            <div class="stat-number">{{ total_options }}</div>
+            <p class="stat-label">Opciones</p>
         </div>
     </div>
 
     <div class="col-md-6 col-xl-3">
-        <div class="card form-card p-4 text-center">
-            <h3 class="fw-bold">{{ total_products }}</h3>
-            <p class="text-muted mb-0">Productos</p>
+        <div class="card stat-card p-4 text-center h-100">
+            <div class="stat-number">{{ total_products }}</div>
+            <p class="stat-label">Productos</p>
         </div>
     </div>
 
     <div class="col-md-6 col-xl-3">
-        <div class="card form-card p-4 text-center">
-            <h3 class="fw-bold">{{ total_orders }}</h3>
-            <p class="text-muted mb-0">Pedidos</p>
+        <div class="card stat-card p-4 text-center h-100">
+            <div class="stat-number">{{ total_orders }}</div>
+            <p class="stat-label">Pedidos</p>
         </div>
     </div>
 </div>
@@ -43,38 +44,64 @@
 <div class="row g-4">
     <div class="col-md-6 col-xl-3">
         <a href="{{ url_for('admin.manage_categories') }}" class="text-decoration-none">
-            <div class="card custom-panel p-4 h-100">
+            <div class="card admin-link-card p-4 h-100">
                 <h4 class="fw-bold text-dark">Categorías</h4>
-                <p class="text-muted mb-0">Administrar categorías del configurador.</p>
+                <p class="text-muted">Administrar categorías del configurador.</p>
+                <span class="go-text">Ir a categorías →</span>
             </div>
         </a>
     </div>
 
     <div class="col-md-6 col-xl-3">
         <a href="{{ url_for('admin.manage_options') }}" class="text-decoration-none">
-            <div class="card custom-panel p-4 h-100">
+            <div class="card admin-link-card p-4 h-100">
                 <h4 class="fw-bold text-dark">Opciones</h4>
-                <p class="text-muted mb-0">Crear telas, colores y más.</p>
+                <p class="text-muted">Crear telas, colores y más.</p>
+                <span class="go-text">Ir a opciones →</span>
             </div>
         </a>
     </div>
 
     <div class="col-md-6 col-xl-3">
         <a href="{{ url_for('admin.manage_products') }}" class="text-decoration-none">
-            <div class="card custom-panel p-4 h-100">
+            <div class="card admin-link-card p-4 h-100">
                 <h4 class="fw-bold text-dark">Productos</h4>
-                <p class="text-muted mb-0">Agregar y ver modelos de sillones.</p>
+                <p class="text-muted">Agregar y ver modelos de sillones.</p>
+                <span class="go-text">Ir a productos →</span>
             </div>
         </a>
     </div>
 
     <div class="col-md-6 col-xl-3">
         <a href="{{ url_for('admin.manage_orders') }}" class="text-decoration-none">
-            <div class="card custom-panel p-4 h-100">
+            <div class="card admin-link-card p-4 h-100">
                 <h4 class="fw-bold text-dark">Pedidos</h4>
-                <p class="text-muted mb-0">Ver pedidos realizados por clientes.</p>
+                <p class="text-muted">Ver pedidos realizados por clientes.</p>
+                <span class="go-text">Ir a pedidos →</span>
             </div>
         </a>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-6">
+        <div class="card form-card p-4 h-100">
+            <h5 class="fw-bold mb-3">Vista rápida</h5>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('public.home') }}" class="btn btn-outline-dark">Ver inicio como cliente</a>
+                <a href="{{ url_for('admin.manage_products') }}" class="btn btn-outline-dark">Cargar productos</a>
+                <a href="{{ url_for('admin.manage_options') }}" class="btn btn-outline-dark">Gestionar opciones</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card form-card p-4 h-100">
+            <h5 class="fw-bold mb-3">Administrador actual</h5>
+            <p class="mb-2"><strong>Nombre:</strong> {{ current_user.name }}</p>
+            <p class="mb-2"><strong>Email:</strong> {{ current_user.email }}</p>
+            <p class="mb-0"><strong>Rol:</strong> {{ current_user.role }}</p>
+        </div>
     </div>
 </div>
 {% endblock %}
