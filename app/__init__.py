@@ -28,7 +28,6 @@ def create_app():
 
     with app.app_context():
         create_admin_if_not_exists()
-
     return app
 
 

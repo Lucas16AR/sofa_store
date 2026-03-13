@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20), default="user")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     name = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(30), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
 
     def set_password(self, password):
@@ -61,6 +62,10 @@ class Order(db.Model):
     status = db.Column(db.String(20), default="pending")  # pending, confirmed, in_production, delivered, cancelled
     notes = db.Column(db.Text, nullable=True)
     total_price = db.Column(db.Float, nullable=False)
+
+    customer_name = db.Column(db.String(120), nullable=True)
+    customer_email = db.Column(db.String(150), nullable=True)
+    customer_phone = db.Column(db.String(30), nullable=True)
 
     user = db.relationship("User", backref="orders")
     product = db.relationship("Product", backref="orders")

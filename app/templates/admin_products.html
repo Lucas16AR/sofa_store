@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h1 class="fw-bold mb-1">Administrar Productos</h1>
-        <p class="text-muted mb-0">Creá los modelos de sillones que verá el cliente.</p>
+        <p class="text-muted mb-0">Creá y gestioná los modelos de sillones que verá el cliente.</p>
     </div>
     <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
 </div>
@@ -64,11 +64,31 @@
                                     <p class="text-muted">{{ product.description or "Sin descripción." }}</p>
                                     <p class="mb-2"><strong>Precio base:</strong> ${{ product.base_price }}</p>
 
-                                    {% if product.is_active %}
-                                        <span class="badge bg-success">Activo</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Inactivo</span>
-                                    {% endif %}
+                                    <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+                                        {% if product.is_active %}
+                                            <span class="badge bg-success">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        {% endif %}
+
+                                        <form method="POST" action="{{ url_for('admin.toggle_product', product_id=product.id) }}">
+                                            {{ toggle_form.hidden_tag() }}
+                                            <button type="submit" class="btn btn-sm btn-outline-dark">
+                                                {% if product.is_active %}
+                                                    Desactivar
+                                                {% else %}
+                                                    Activar
+                                                {% endif %}
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ url_for('admin.delete_product', product_id=product.id) }}">
+                                            {{ delete_form.hidden_tag() }}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

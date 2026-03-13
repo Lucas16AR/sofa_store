@@ -37,6 +37,7 @@ def register():
 
         user = User(
             name=form.name.data,
+            phone=form.phone.data,
             email=form.email.data,
             role="user"
         )

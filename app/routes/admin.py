@@ -2,7 +2,7 @@ import os
 import cloudinary.uploader
 from uuid import uuid4
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, redirect, url_for, abort, flash, request
+from flask import Blueprint, render_template, redirect, url_for, abort, flash
 from flask_login import login_required, current_user
 
 from app.models import OptionCategory, Option, Product, Order
@@ -11,11 +11,9 @@ from app.forms.admin_forms import CategoryForm, OptionForm, ProductForm, SimpleS
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
-
 def admin_required():
     if current_user.role != "admin":
         abort(403)
-
 
 @admin_bp.route("/")
 @login_required
@@ -35,15 +33,14 @@ def dashboard():
         total_orders=total_orders
     )
 
-
 @admin_bp.route("/categories", methods=["GET", "POST"])
 @login_required
 def manage_categories():
     admin_required()
 
     form = CategoryForm()
-    categories = OptionCategory.query.order_by(OptionCategory.created_at.desc()).all()
     delete_form = SimpleSubmitForm()
+    categories = OptionCategory.query.order_by(OptionCategory.created_at.desc()).all()
 
     if form.validate_on_submit():
         existing = OptionCategory.query.filter_by(name=form.name.data.strip()).first()
@@ -57,11 +54,12 @@ def manage_categories():
             flash("Categoría creada correctamente")
             return redirect(url_for("admin.manage_categories"))
 
-    return render_template("admin_categories.html", 
-                           form=form, 
-                           categories=categories,
-                           delete_form=delete_form)
-
+    return render_template(
+        "admin_categories.html",
+        form=form,
+        categories=categories,
+        delete_form=delete_form
+    )
 
 @admin_bp.route("/categories/<int:category_id>/edit", methods=["GET", "POST"])
 @login_required
@@ -88,7 +86,6 @@ def edit_category(category_id):
 
     return render_template("edit_category.html", form=form, category=category)
 
-
 @admin_bp.route("/categories/<int:category_id>/delete", methods=["POST"])
 @login_required
 def delete_category(category_id):
@@ -105,18 +102,20 @@ def delete_category(category_id):
     flash("Categoría eliminada correctamente")
     return redirect(url_for("admin.manage_categories"))
 
-
 @admin_bp.route("/options", methods=["GET", "POST"])
 @login_required
 def manage_options():
     admin_required()
 
     form = OptionForm()
+    toggle_form = SimpleSubmitForm()
+    delete_form = SimpleSubmitForm()
+
     form.category.choices = [
         (c.id, c.name) for c in OptionCategory.query.order_by(OptionCategory.name.asc()).all()
     ]
+
     options = Option.query.order_by(Option.created_at.desc()).all()
-    toggle_form = SimpleSubmitForm()
 
     if form.validate_on_submit():
         image_url = None
@@ -129,7 +128,8 @@ def manage_options():
             name=form.name.data.strip(),
             category_id=form.category.data,
             image_url=image_url,
-            is_active=True
+            is_active=True,
+            price_modifier=float(form.price_modifier.data or 0)
         )
 
         db.session.add(option)
@@ -138,11 +138,13 @@ def manage_options():
         flash("Opción creada correctamente")
         return redirect(url_for("admin.manage_options"))
 
-    return render_template("admin_options.html", 
-                           form=form, 
-                           options=options,
-                           toggle_form=toggle_form)
-
+    return render_template(
+        "admin_options.html",
+        form=form,
+        options=options,
+        toggle_form=toggle_form,
+        delete_form=delete_form
+    )
 
 @admin_bp.route("/options/<int:option_id>/toggle", methods=["POST"])
 @login_required
@@ -160,6 +162,16 @@ def toggle_option(option_id):
 
     return redirect(url_for("admin.manage_options"))
 
+@admin_bp.route("/options/<int:option_id>/delete", methods=["POST"])
+@login_required
+def delete_option(option_id):
+    admin_required()
+
+    option = Option.query.get_or_404(option_id)
+    db.session.delete(option)
+    db.session.commit()
+    flash("Opción eliminada correctamente")
+    return redirect(url_for("admin.manage_options"))
 
 @admin_bp.route("/products", methods=["GET", "POST"])
 @login_required
@@ -167,6 +179,8 @@ def manage_products():
     admin_required()
 
     form = ProductForm()
+    toggle_form = SimpleSubmitForm()
+    delete_form = SimpleSubmitForm()
     products = Product.query.order_by(Product.created_at.desc()).all()
 
     if form.validate_on_submit():
@@ -201,8 +215,45 @@ def manage_products():
         flash("Producto creado correctamente")
         return redirect(url_for("admin.manage_products"))
 
-    return render_template("admin_products.html", form=form, products=products)
+    return render_template(
+        "admin_products.html",
+        form=form,
+        products=products,
+        toggle_form=toggle_form,
+        delete_form=delete_form
+    )
 
+@admin_bp.route("/products/<int:product_id>/toggle", methods=["POST"])
+@login_required
+def toggle_product(product_id):
+    admin_required()
+
+    product = Product.query.get_or_404(product_id)
+    product.is_active = not product.is_active
+    db.session.commit()
+
+    if product.is_active:
+        flash("Producto activado correctamente")
+    else:
+        flash("Producto desactivado correctamente")
+
+    return redirect(url_for("admin.manage_products"))
+
+@admin_bp.route("/products/<int:product_id>/delete", methods=["POST"])
+@login_required
+def delete_product(product_id):
+    admin_required()
+
+    product = Product.query.get_or_404(product_id)
+
+    if product.orders:
+        flash("No se puede eliminar un producto que ya tiene pedidos asociados. Podés desactivarlo.")
+        return redirect(url_for("admin.manage_products"))
+
+    db.session.delete(product)
+    db.session.commit()
+    flash("Producto eliminado correctamente")
+    return redirect(url_for("admin.manage_products"))
 
 @admin_bp.route("/orders")
 @login_required

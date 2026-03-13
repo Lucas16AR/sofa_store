@@ -6,38 +6,65 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h1 class="fw-bold mb-1">Pedidos realizados</h1>
-        <p class="text-muted mb-0">Listado de pedidos registrados en el sistema.</p>
+        <p class="text-muted mb-0">Listado detallado de pedidos registrados en el sistema.</p>
     </div>
     <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark">Volver al panel</a>
 </div>
 
 <div class="card form-card p-4">
     {% if orders %}
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Cliente</th>
-                        <th>Producto</th>
-                        <th>Estado</th>
-                        <th>Total</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                        <tr>
-                            <td>#{{ order.id }}</td>
-                            <td>{{ order.user.name }}</td>
-                            <td>{{ order.product.name }}</td>
-                            <td>{{ order.status }}</td>
-                            <td>${{ order.total_price }}</td>
-                            <td>{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="accordion" id="ordersAccordion">
+            {% for order in orders %}
+                <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed rounded-4" type="button" data-bs-toggle="collapse" data-bs-target="#order{{ order.id }}">
+                            Pedido #{{ order.id }} - {{ order.product.name }} - {{ order.customer_name or order.user.name }}
+                        </button>
+                    </h2>
+
+                    <div id="order{{ order.id }}" class="accordion-collapse collapse" data-bs-parent="#ordersAccordion">
+                        <div class="accordion-body">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <h5 class="fw-bold">Datos del cliente</h5>
+                                    <p class="mb-1"><strong>Nombre:</strong> {{ order.customer_name or order.user.name }}</p>
+                                    <p class="mb-1"><strong>Email:</strong> {{ order.customer_email or order.user.email }}</p>
+                                    <p class="mb-1"><strong>Teléfono:</strong> {{ order.customer_phone or order.user.phone or 'No informado' }}</p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5 class="fw-bold">Datos del pedido</h5>
+                                    <p class="mb-1"><strong>Producto:</strong> {{ order.product.name }}</p>
+                                    <p class="mb-1"><strong>Estado:</strong> {{ order.status }}</p>
+                                    <p class="mb-1"><strong>Total:</strong> ${{ order.total_price }}</p>
+                                    <p class="mb-1"><strong>Fecha:</strong> {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <h6 class="fw-bold">Configuración elegida</h6>
+                            <ul>
+                                {% for config in order.configurations %}
+                                    <li>
+                                        {{ config.option_name_snapshot }}
+                                        {% if config.option_price_snapshot %}
+                                            - ${{ config.option_price_snapshot }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            {% if order.notes %}
+                                <div class="mt-3">
+                                    <h6 class="fw-bold">Observaciones</h6>
+                                    <p class="mb-0">{{ order.notes }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
         <div class="alert alert-secondary mb-0">

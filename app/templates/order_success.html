@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Pedido confirmado | Sofa Store{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card form-card p-5 text-center">
+            <div class="mb-4">
+                <h1 class="fw-bold text-success">¡Pedido realizado con éxito!</h1>
+                <p class="text-muted mb-0">
+                    Tu pedido fue guardado correctamente en el sistema.
+                </p>
+            </div>
+
+            <div class="text-start mt-4">
+                <h4 class="fw-bold mb-3">Resumen del pedido</h4>
+
+                <p class="mb-1"><strong>Número:</strong> #{{ order.id }}</p>
+                <p class="mb-1"><strong>Producto:</strong> {{ order.product.name }}</p>
+                <p class="mb-1"><strong>Fecha:</strong> {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p class="mb-1"><strong>Estado:</strong> {{ order.status }}</p>
+                <p class="mb-3"><strong>Total:</strong> ${{ order.total_price }}</p>
+
+                <h5 class="fw-bold">Configuración elegida</h5>
+                <ul>
+                    {% for config in order.configurations %}
+                        <li>
+                            {{ config.option_name_snapshot }}
+                            {% if config.option_price_snapshot %}
+                                - ${{ config.option_price_snapshot }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if order.notes %}
+                    <h5 class="fw-bold mt-4">Observaciones</h5>
+                    <p class="mb-0">{{ order.notes }}</p>
+                {% endif %}
+            </div>
+
+            <div class="d-flex gap-2 justify-content-center flex-wrap mt-4">
+                <a href="{{ url_for('public.my_orders') }}" class="btn btn-dark">
+                    Ver mis pedidos
+                </a>
+                <a href="{{ url_for('public.home') }}" class="btn btn-outline-dark">
+                    Volver al inicio
+                </a>
+                <a href="{{ url_for('public.order_whatsapp', order_id=order.id) }}" class="btn btn-success">
+                    Enviar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

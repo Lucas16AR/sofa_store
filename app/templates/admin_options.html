@@ -34,6 +34,12 @@
                     {{ form.image(class="form-control") }}
                 </div>
 
+                <div class="mb-3">
+                    {{ form.price_modifier.label(class="form-label") }}
+                    {{ form.price_modifier(class="form-control", placeholder="Ej: 15000") }}
+                    <div class="form-text">Dejá 0 si no tiene costo adicional.</div>
+                </div>
+
                 {{ form.submit(class="btn btn-dark w-100") }}
             </form>
         </div>
@@ -58,14 +64,18 @@
                                     <h5 class="fw-bold">{{ option.name }}</h5>
                                     <p class="text-muted mb-2">Categoría: {{ option.category.name }}</p>
 
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            {% if option.is_active %}
-                                                <span class="badge bg-success">Activa</span>
-                                            {% else %}
-                                                <span class="badge bg-secondary">Inactiva</span>
-                                            {% endif %}
-                                        </div>
+                                    {% if option.price_modifier and option.price_modifier > 0 %}
+                                        <p class="mb-2"><strong>Adicional:</strong> ${{ option.price_modifier }}</p>
+                                    {% else %}
+                                        <p class="mb-2"><strong>Adicional:</strong> Sin costo extra</p>
+                                    {% endif %}
+
+                                    <div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+                                        {% if option.is_active %}
+                                            <span class="badge bg-success">Activa</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactiva</span>
+                                        {% endif %}
 
                                         <form method="POST" action="{{ url_for('admin.toggle_option', option_id=option.id) }}">
                                             {{ toggle_form.hidden_tag() }}
@@ -75,6 +85,13 @@
                                                 {% else %}
                                                     Activar
                                                 {% endif %}
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ url_for('admin.delete_option', option_id=option.id) }}">
+                                            {{ delete_form.hidden_tag() }}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Eliminar
                                             </button>
                                         </form>
                                     </div>
